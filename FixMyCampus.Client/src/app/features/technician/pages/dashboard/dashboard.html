@@ -1,1 +1,134 @@
-<p>dashboard works!</p>
+<div class="dashboard-page">
+  <header class="page-header">
+    <div>
+      <h1>Technician Dashboard</h1>
+
+      <p>Welcome back, {{ technicianName() }}. Manage your assigned maintenance tickets.</p>
+    </div>
+
+    <a routerLink="/technician/assigned-tickets" class="primary-button"> View Assigned Tickets </a>
+  </header>
+
+  <section class="statistics">
+    <div class="stat-card">
+      <div class="stat-icon blue">A</div>
+
+      <div>
+        <span class="stat-label"> Assigned </span>
+
+        <strong class="stat-value">
+          {{ assignedTickets() }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon orange">→</div>
+
+      <div>
+        <span class="stat-label"> In Progress </span>
+
+        <strong class="stat-value">
+          {{ inProgressTickets() }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon green">✓</div>
+
+      <div>
+        <span class="stat-label"> Resolved </span>
+
+        <strong class="stat-value">
+          {{ resolvedTickets() }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon red">!</div>
+
+      <div>
+        <span class="stat-label"> High Urgency </span>
+
+        <strong class="stat-value">
+          {{ highUrgencyTickets() }}
+        </strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="tickets-section">
+    <div class="section-header">
+      <div>
+        <h2>My Active Tickets</h2>
+
+        <p>Tickets currently assigned to you.</p>
+      </div>
+
+      <a routerLink="/technician/assigned-tickets" class="view-all"> View all </a>
+    </div>
+
+    @if (activeTickets().length > 0) {
+      <div class="ticket-list">
+        @for (ticket of activeTickets(); track ticket.id) {
+          <article class="ticket-card">
+            <div class="ticket-main">
+              <div class="ticket-heading">
+                <h3>
+                  {{ ticket.title }}
+                </h3>
+
+                <span
+                  class="status"
+                  [class.assigned]="ticket.status === 'Assigned'"
+                  [class.progress]="ticket.status === 'In Progress'"
+                >
+                  {{ ticket.status }}
+                </span>
+              </div>
+
+              <div class="ticket-meta">
+                <span>
+                  {{ ticket.category }}
+                </span>
+
+                <span>
+                  {{ ticket.building }}
+                </span>
+
+                <span> Room {{ ticket.room }} </span>
+              </div>
+
+              <div class="reporter">Reported by {{ ticket.reporterName }}</div>
+            </div>
+
+            <div class="ticket-side">
+              <span
+                class="urgency"
+                [class.high]="ticket.urgency === 'High'"
+                [class.medium]="ticket.urgency === 'Medium'"
+                [class.low]="ticket.urgency === 'Low'"
+              >
+                {{ ticket.urgency }}
+              </span>
+
+              <a [routerLink]="['/technician/ticket-details', ticket.id]" class="details-button">
+                Open Ticket
+              </a>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-icon">✓</div>
+
+        <h3>No active tickets</h3>
+
+        <p>You currently have no tickets requiring attention.</p>
+      </div>
+    }
+  </section>
+</div>

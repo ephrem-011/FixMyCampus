@@ -6,7 +6,7 @@
       <p>Track your campus issues and report new problems.</p>
     </div>
 
-    <a routerLink="/reporter/report-issue" class="primary-button"> + Report New Issue </a>
+    <a routerLink="/tickets/report" class="primary-button"> + Report New Issue </a>
   </div>
 
   <section class="statistics">
@@ -67,7 +67,7 @@
         <p>Your latest reported campus issues.</p>
       </div>
 
-      <a routerLink="/reporter/my-tickets" class="view-all"> View all </a>
+      <a routerLink="/tickets/my" class="view-all"> View all </a>
     </div>
 
     @if (recentTickets().length > 0) {
@@ -101,7 +101,7 @@
                 {{ ticket.id }}
               </span>
 
-              <a [routerLink]="['/reporter/ticket-details', ticket.id]" class="details-link">
+              <a [routerLink]="['/tickets', ticket.id]" class="details-link">
                 View
               </a>
             </div>
@@ -116,7 +116,7 @@
 
         <p>You haven't reported any campus issues.</p>
 
-        <a routerLink="/reporter/report-issue" class="primary-button"> Report an Issue </a>
+        <a routerLink="/tickets/report" class="primary-button"> Report an Issue </a>
       </div>
     }
   </section>

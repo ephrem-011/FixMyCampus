@@ -5,15 +5,22 @@
       <span>Campus Feed</span>
     </a>
 
-    <a routerLink="/tickets/report" routerLinkActive="active" class="nav-item">
-      <span class="nav-icon">+</span>
-      <span>Report Issue</span>
-    </a>
+    @if (role() === 'Reporter') {
+      <a routerLink="/reporter/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">▦</span>
+        <span>Dashboard</span>
+      </a>
 
-    <a routerLink="/tickets/my-tickets" routerLinkActive="active" class="nav-item">
-      <span class="nav-icon">▣</span>
-      <span>My Tickets</span>
-    </a>
+      <a routerLink="/tickets/report" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">+</span>
+        <span>Report Issue</span>
+      </a>
+
+      <a routerLink="/tickets/my" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">▣</span>
+        <span>My Tickets</span>
+      </a>
+    }
 
     @if (role() === 'Admin') {
       <div class="nav-section">
@@ -40,7 +47,7 @@
           <span>Dashboard</span>
         </a>
 
-        <a routerLink="/technician/assigned-tickets" routerLinkActive="active" class="nav-item">
+        <a routerLink="/technician/assigned" routerLinkActive="active" class="nav-item">
           <span class="nav-icon">✓</span>
           <span>Assigned Tickets</span>
         </a>

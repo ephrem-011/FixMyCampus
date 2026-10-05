@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthApi } from '../../../features/auth/services/auth-api';
 
 @Component({
   selector: 'app-navbar',
@@ -8,10 +9,13 @@ import { RouterLink } from '@angular/router';
   styleUrl: './navbar.scss',
 })
 export class Navbar {
-  readonly userName = signal('User');
-  readonly userRole = signal('Reporter');
+  private readonly authApi = inject(AuthApi);
+  private readonly router = inject(Router);
+  readonly userName = computed(() => this.authApi.session?.fullName ?? 'User');
+  readonly userRole = computed(() => this.authApi.session?.role ?? '');
 
   logout(): void {
-    console.log('Logout');
+    this.authApi.logout();
+    void this.router.navigateByUrl('/auth/login');
   }
 }

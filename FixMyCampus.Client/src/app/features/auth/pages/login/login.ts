@@ -35,12 +35,12 @@ export class LoginComponent {
     this.authApi.login(this.loginForm.getRawValue()).subscribe({
       next: (user) => {
         const destinations: Record<string, string> = {
-          Admin: '/admin/tickets',
-          Technician: '/technician/assigned',
-          Reporter: '/tickets/my',
+          Admin: '/admin/dashboard',
+          Technician: '/technician/dashboard',
+          Reporter: '/reporter/dashboard',
         };
         this.loading.set(false);
-        void this.router.navigateByUrl(destinations[user.role] ?? '/tickets/my');
+        void this.router.navigateByUrl(destinations[user.role] ?? '/auth/login');
       },
       error: (error: { error?: { message?: string } }) => {
         this.errorMessage.set(

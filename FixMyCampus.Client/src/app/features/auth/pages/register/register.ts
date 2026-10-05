@@ -43,7 +43,7 @@ export class Register {
     this.authApi.register({ fullName, email, password }).subscribe({
       next: () => {
         this.loading.set(false);
-        void this.router.navigateByUrl('/tickets/my');
+        void this.router.navigateByUrl('/reporter/dashboard');
       },
       error: (error: { error?: { message?: string } }) => {
         this.errorMessage.set(

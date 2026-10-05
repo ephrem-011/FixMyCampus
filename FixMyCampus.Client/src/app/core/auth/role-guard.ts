@@ -20,9 +20,9 @@ export class RoleGuard implements CanActivate {
     }
 
     const destination: Record<string, string> = {
-      Admin: '/admin/tickets',
-      Reporter: '/tickets/my',
-      Technician: '/technician/assigned',
+      Admin: '/admin/dashboard',
+      Reporter: '/reporter/dashboard',
+      Technician: '/technician/dashboard',
     };
     return this.router.parseUrl(destination[role] ?? '/auth/login');
   }

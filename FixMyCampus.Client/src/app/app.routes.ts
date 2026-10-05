@@ -20,6 +20,24 @@ export const routes: Routes = [
   },
 
   {
+    path: 'reporter',
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['Reporter'] },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/reporter/pages/dashboard/dashboard').then((m) => m.Dashboard),
+      },
+    ],
+  },
+
+  {
     path: 'tickets',
     children: [
       {
@@ -29,12 +47,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/tickets/pages/my-tickets/my-tickets').then((m) => m.MyTickets),
       },
+
       {
         path: 'feed',
         canActivate: [AuthGuard],
         loadComponent: () =>
           import('./features/tickets/pages/campus-feed/campus-feed').then((m) => m.CampusFeed),
       },
+
       {
         path: 'report',
         canActivate: [AuthGuard, RoleGuard],
@@ -42,6 +62,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/tickets/pages/report-issue/report-issue').then((m) => m.ReportIssue),
       },
+
       {
         path: ':id',
         canActivate: [AuthGuard],
@@ -59,10 +80,23 @@ export const routes: Routes = [
     data: { roles: ['Admin'] },
     children: [
       {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/admin/pages/dashboard/dashboard').then((m) => m.Dashboard),
+      },
+
+      {
         path: 'tickets',
         loadComponent: () =>
           import('./features/admin/pages/tickets/tickets').then((m) => m.Tickets),
       },
+
       {
         path: 'tickets/:id',
         loadComponent: () =>
@@ -70,6 +104,7 @@ export const routes: Routes = [
             (m) => m.TicketDetails,
           ),
       },
+
       {
         path: 'assign/:id',
         loadComponent: () =>
@@ -86,12 +121,25 @@ export const routes: Routes = [
     data: { roles: ['Technician'] },
     children: [
       {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/technician/pages/dashboard/dashboard').then((m) => m.Dashboard),
+      },
+
+      {
         path: 'assigned',
         loadComponent: () =>
           import('./features/technician/pages/assigned-tickets/assigned-tickets').then(
             (m) => m.AssignedTickets,
           ),
       },
+
       {
         path: 'ticket/:id',
         loadComponent: () =>
@@ -99,6 +147,7 @@ export const routes: Routes = [
             (m) => m.TicketDetails,
           ),
       },
+
       {
         path: 'resolve/:id',
         loadComponent: () =>

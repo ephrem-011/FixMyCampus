@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
@@ -24,6 +24,7 @@ export interface RegisterRequest {
 export class AuthApi {
   private readonly apiUrl = '/api/Auth';
   private readonly storageKey = 'fixmycampus.auth';
+  private readonly activeSession = signal<LoginResponse | null>(this.readSession());
 
   constructor(private readonly http: HttpClient) {}
 
@@ -41,7 +42,12 @@ export class AuthApi {
   ): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(url, request)
-      .pipe(tap((response) => localStorage.setItem(this.storageKey, JSON.stringify(response))));
+      .pipe(
+        tap((response) => {
+          localStorage.setItem(this.storageKey, JSON.stringify(response));
+          this.activeSession.set(response);
+        }),
+      );
   }
 
   get token(): string | null {
@@ -49,8 +55,15 @@ export class AuthApi {
   }
 
   get session(): LoginResponse | null {
-    const stored = localStorage.getItem(this.storageKey);
+    return this.activeSession();
+  }
 
+  private readSession(): LoginResponse | null {
+    if (typeof localStorage === 'undefined') {
+      return null;
+    }
+
+    const stored = localStorage.getItem(this.storageKey);
     if (!stored) {
       return null;
     }
@@ -65,5 +78,6 @@ export class AuthApi {
 
   logout(): void {
     localStorage.removeItem(this.storageKey);
+    this.activeSession.set(null);
   }
 }

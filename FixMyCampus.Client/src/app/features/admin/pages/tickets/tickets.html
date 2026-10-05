@@ -6,8 +6,53 @@
     </div>
   </header>
 
+  <div class="ticket-controls" role="search" aria-label="Search and filter tickets">
+    <label>
+      <span>Search</span>
+      <input
+        type="search"
+        placeholder="Title, category, building, room, or reporter"
+        [value]="searchTerm()"
+        (input)="updateSearch($event)"
+      />
+    </label>
+
+    <label>
+      <span>Status</span>
+      <select [value]="statusFilter()" (change)="updateStatusFilter($event)">
+        <option value="All">All statuses</option>
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status === 'InProgress' ? 'In Progress' : status }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      <span>Priority</span>
+      <select [value]="priorityFilter()" (change)="updatePriorityFilter($event)">
+        <option value="All">All priorities</option>
+        @for (priority of priorities; track priority) {
+          <option [value]="priority">{{ priority }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      <span>Sort by</span>
+      <select [value]="sortOrder()" (change)="updateSortOrder($event)">
+        @for (option of sortOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  <p class="result-count" aria-live="polite">
+    Showing {{ filteredTickets().length }} of {{ tickets().length }} tickets
+  </p>
+
   <div class="ticket-list admin-list">
-    @for (ticket of tickets(); track ticket.id) {
+    @for (ticket of filteredTickets(); track ticket.id) {
       <article class="ticket-card">
         <div class="ticket-topline">
           <span class="ticket-label">{{ ticket.category }}</span>
@@ -23,6 +68,16 @@
           <a [routerLink]="['/admin/assign', ticket.id]">Assign</a>
         </div>
       </article>
+    } @empty {
+      <div class="empty-state">
+        @if (tickets().length === 0) {
+          <h2>No tickets yet</h2>
+          <p>New campus issues will appear here.</p>
+        } @else {
+          <h2>No matching tickets</h2>
+          <p>Try changing your search or filters.</p>
+        }
+      </div>
     }
   </div>
 </section>

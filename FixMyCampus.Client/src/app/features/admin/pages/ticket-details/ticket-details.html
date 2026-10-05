@@ -1,1 +1,21 @@
-<p>ticket-details works!</p>
+@if (ticket(); as selectedTicket) {
+  <section class="page-shell detail-shell">
+    <header class="page-header detail-header">
+      <div>
+        <p class="eyebrow">Admin review</p>
+        <h1>{{ selectedTicket.title }}</h1>
+      </div>
+      <a class="primary-button" [routerLink]="['/admin/assign', selectedTicket.id]">Assign technician</a>
+    </header>
+
+    <div class="detail-card">
+      <p><strong>Reporter:</strong> {{ selectedTicket.reporterName }}</p>
+      <p><strong>Room:</strong> {{ selectedTicket.room }}</p>
+      <p><strong>Status:</strong> {{ selectedTicket.status }}</p>
+      <p><strong>Priority:</strong> {{ selectedTicket.priority }}</p>
+      <p class="description">{{ selectedTicket.description }}</p>
+    </div>
+  </section>
+} @else {
+  <p>Loading ticket…</p>
+}

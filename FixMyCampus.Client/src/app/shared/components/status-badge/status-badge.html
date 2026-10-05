@@ -1,1 +1,9 @@
-<p>status-badge works!</p>
+<span
+  class="status-badge"
+  [class.new]="statusClass() === 'new'"
+  [class.assigned]="statusClass() === 'assigned'"
+  [class.in-progress]="statusClass() === 'in-progress'"
+  [class.resolved]="statusClass() === 'resolved'"
+>
+  {{ status() }}
+</span>

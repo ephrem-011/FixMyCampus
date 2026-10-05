@@ -1,1 +1,20 @@
-<p>duplicate-warning works!</p>
+@if (visible()) {
+  <div class="duplicate-warning">
+    <div class="warning-icon">!</div>
+
+    <div class="warning-content">
+      <h3>Possible duplicate issue</h3>
+
+      <p>
+        A similar issue may already have been reported. Please check existing tickets before
+        submitting.
+      </p>
+
+      @if (ticketId()) {
+        <a [routerLink]="['/tickets', ticketId()]" class="view-ticket"> View existing ticket </a>
+      }
+    </div>
+
+    <button type="button" class="close-button" (click)="dismiss.emit()">×</button>
+  </div>
+}

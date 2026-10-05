@@ -1,1 +1,33 @@
-<p>assign-technician works!</p>
+@if (ticket(); as selectedTicket) {
+  <section class="page-shell narrow-shell">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Assignment</p>
+        <h1>Assign technician</h1>
+      </div>
+    </header>
+
+    <div class="detail-card">
+      <h2>{{ selectedTicket.title }}</h2>
+      <p>{{ selectedTicket.description }}</p>
+
+      <form class="ticket-form" [formGroup]="form" (ngSubmit)="assign()">
+        <div class="field">
+          <label for="technicianId">Technician ID</label>
+          <input id="technicianId" type="number" formControlName="technicianId" />
+        </div>
+
+        <div class="field">
+          <label for="technicianName">Technician name</label>
+          <input id="technicianName" formControlName="technicianName" />
+        </div>
+
+        <button type="submit" class="primary-button" [disabled]="assigning()">
+          {{ assigning() ? 'Assigning...' : 'Assign ticket' }}
+        </button>
+      </form>
+    </div>
+  </section>
+} @else {
+  <p>Loading technician assignment…</p>
+}

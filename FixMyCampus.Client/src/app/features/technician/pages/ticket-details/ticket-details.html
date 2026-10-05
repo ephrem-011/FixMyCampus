@@ -1,1 +1,28 @@
-<p>ticket-details works!</p>
+@if (ticket(); as selectedTicket) {
+  <section class="page-shell detail-shell">
+    <header class="page-header detail-header">
+      <div>
+        <p class="eyebrow">Ticket</p>
+        <h1>{{ selectedTicket.title }}</h1>
+      </div>
+      <span class="status-badge status-{{ selectedTicket.status.toLowerCase() }}">{{ selectedTicket.status }}</span>
+    </header>
+
+    <div class="detail-grid">
+      <article class="detail-card">
+        <h2>Issue details</h2>
+        <p><strong>Room:</strong> {{ selectedTicket.room }}</p>
+        <p><strong>Building:</strong> {{ selectedTicket.buildingName }}</p>
+        <p><strong>Reporter:</strong> {{ selectedTicket.reporterName }}</p>
+        <p class="description">{{ selectedTicket.description }}</p>
+      </article>
+
+      <aside class="detail-card">
+        <h2>Timeline</h2>
+        <app-ticket-timeline [history]="selectedTicket.history"></app-ticket-timeline>
+      </aside>
+    </div>
+  </section>
+} @else {
+  <p>Loading ticket…</p>
+}

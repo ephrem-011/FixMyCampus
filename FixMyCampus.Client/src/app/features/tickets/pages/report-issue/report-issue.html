@@ -1,1 +1,64 @@
-<p>report-issue works!</p>
+<section class="page-shell narrow-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Create</p>
+      <h1>Report a campus issue</h1>
+    </div>
+
+    <a class="secondary-button" routerLink="/tickets/my">View my tickets</a>
+  </header>
+
+  <form class="ticket-form" [formGroup]="reportForm" (ngSubmit)="submit()">
+    <div class="field">
+      <label for="title">Issue title</label>
+      <input id="title" formControlName="title" placeholder="Broken classroom door handle" />
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category" formControlName="category">
+          <option>General Facilities</option>
+          <option>Electrical</option>
+          <option>Plumbing</option>
+          <option>HVAC</option>
+          <option>AV Equipment</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="room">Room</label>
+        <input id="room" formControlName="room" placeholder="A-145" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="buildingId">Building</label>
+        <select id="buildingId" formControlName="buildingId">
+          <option [ngValue]="1">Engineering Hall</option>
+          <option [ngValue]="2">Science Center</option>
+          <option [ngValue]="3">Central Library</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="priority">Priority</label>
+        <select id="priority" formControlName="priority">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" rows="6" placeholder="Describe what is broken and when it started."></textarea>
+    </div>
+
+    <button class="primary-button" type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Submitting...' : 'Submit ticket' }}
+    </button>
+  </form>
+</section>

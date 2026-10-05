@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [],
   selector: 'app-duplicate-warning',
-  styleUrl: './duplicate-warning.scss',
+  imports: [RouterLink],
   templateUrl: './duplicate-warning.html',
+  styleUrl: './duplicate-warning.scss',
 })
-export class DuplicateWarning {}
+export class DuplicateWarning {
+  readonly visible = input(false);
+
+  readonly ticketId = input<string | null>(null);
+
+  readonly dismiss = output<void>();
+}

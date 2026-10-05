@@ -1,0 +1,123 @@
+<div class="dashboard-page">
+  <div class="page-header">
+    <div>
+      <h1>Welcome back, {{ userName() }}</h1>
+
+      <p>Track your campus issues and report new problems.</p>
+    </div>
+
+    <a routerLink="/reporter/report-issue" class="primary-button"> + Report New Issue </a>
+  </div>
+
+  <section class="statistics">
+    <div class="stat-card">
+      <div class="stat-icon blue">#</div>
+
+      <div>
+        <span class="stat-label"> Total Tickets </span>
+
+        <strong class="stat-value">
+          {{ totalTickets() }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon orange">!</div>
+
+      <div>
+        <span class="stat-label"> Active Tickets </span>
+
+        <strong class="stat-value">
+          {{ activeTickets() }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon green">✓</div>
+
+      <div>
+        <span class="stat-label"> Resolved </span>
+
+        <strong class="stat-value">
+          {{ resolvedTickets() }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon gray">○</div>
+
+      <div>
+        <span class="stat-label"> New </span>
+
+        <strong class="stat-value">
+          {{ newTickets() }}
+        </strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="recent-section">
+    <div class="section-header">
+      <div>
+        <h2>My Recent Tickets</h2>
+
+        <p>Your latest reported campus issues.</p>
+      </div>
+
+      <a routerLink="/reporter/my-tickets" class="view-all"> View all </a>
+    </div>
+
+    @if (recentTickets().length > 0) {
+      <div class="ticket-list">
+        @for (ticket of recentTickets(); track ticket.id) {
+          <article class="ticket-card">
+            <div class="ticket-main">
+              <div class="ticket-title-row">
+                <h3>
+                  {{ ticket.title }}
+                </h3>
+
+                <app-status-badge [status]="ticket.status" />
+              </div>
+
+              <div class="ticket-meta">
+                <span>
+                  {{ ticket.category }}
+                </span>
+
+                <span>
+                  {{ ticket.building }}
+                </span>
+
+                <span> Room {{ ticket.room }} </span>
+              </div>
+            </div>
+
+            <div class="ticket-actions">
+              <span class="ticket-id">
+                {{ ticket.id }}
+              </span>
+
+              <a [routerLink]="['/reporter/ticket-details', ticket.id]" class="details-link">
+                View
+              </a>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-icon">✓</div>
+
+        <h3>No tickets yet</h3>
+
+        <p>You haven't reported any campus issues.</p>
+
+        <a routerLink="/reporter/report-issue" class="primary-button"> Report an Issue </a>
+      </div>
+    }
+  </section>
+</div>

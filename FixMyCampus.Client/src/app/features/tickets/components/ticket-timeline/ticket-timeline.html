@@ -1,1 +1,16 @@
-<p>ticket-timeline works!</p>
+@if (history.length === 0) {
+  <p class="muted">No update history available.</p>
+} @else {
+  <ul class="timeline">
+    @for (entry of history; track entry.id) {
+      <li class="timeline-item">
+        <span class="timeline-dot"></span>
+        <div>
+          <strong>{{ entry.toStatus }}</strong>
+          <p>{{ entry.note }}</p>
+          <small>{{ entry.actor }} • {{ entry.changedAt | date: 'medium' }}</small>
+        </div>
+      </li>
+    }
+  </ul>
+}

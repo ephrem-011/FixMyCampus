@@ -1,1 +1,22 @@
-<p>navbar works!</p>
+<header class="navbar">
+  <div class="navbar-left">
+    <a routerLink="/tickets/feed" class="brand">
+      <span class="brand-logo">FC</span>
+      <span class="brand-name">FixMyCampus</span>
+    </a>
+  </div>
+
+  <div class="navbar-right">
+    <div class="user-info">
+      <span class="user-name">
+        {{ userName() }}
+      </span>
+
+      <span class="user-role">
+        {{ userRole() }}
+      </span>
+    </div>
+
+    <button type="button" class="logout-button" (click)="logout()">Logout</button>
+  </div>
+</header>

@@ -1,1 +1,29 @@
-<p>my-tickets works!</p>
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Tickets</p>
+      <h1>My tickets</h1>
+    </div>
+
+    <a class="primary-button" routerLink="/tickets/report">Report an issue</a>
+  </header>
+
+  <div class="toolbar">
+    <a routerLink="/tickets/feed">Campus feed</a>
+    <a routerLink="/admin/tickets">Admin queue</a>
+    <a routerLink="/technician/assigned">Assigned work</a>
+  </div>
+
+  @if (tickets().length === 0) {
+    <div class="empty-state">
+      <h2>No tickets yet</h2>
+      <p>Submit a campus issue to get started.</p>
+    </div>
+  } @else {
+    <div class="ticket-list">
+      @for (ticket of tickets(); track ticket.id) {
+        <app-ticket-card [ticket]="ticket"></app-ticket-card>
+      }
+    </div>
+  }
+</section>

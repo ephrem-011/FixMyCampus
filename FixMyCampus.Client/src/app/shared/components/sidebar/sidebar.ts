@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
-  imports: [],
   selector: 'app-sidebar',
-  styleUrl: './sidebar.scss',
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
+  styleUrl: './sidebar.scss',
 })
-export class Sidebar {}
+export class Sidebar {
+  readonly role = signal('Reporter');
+}

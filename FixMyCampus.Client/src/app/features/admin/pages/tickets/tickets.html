@@ -1,1 +1,28 @@
-<p>tickets works!</p>
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>Ticket queue</h1>
+    </div>
+  </header>
+
+  <div class="ticket-list admin-list">
+    @for (ticket of tickets(); track ticket.id) {
+      <article class="ticket-card">
+        <div class="ticket-topline">
+          <span class="ticket-label">{{ ticket.category }}</span>
+          <span class="status-badge status-{{ ticket.status.toLowerCase() }}">{{ ticket.status }}</span>
+        </div>
+
+        <h3>{{ ticket.title }}</h3>
+        <p>{{ ticket.buildingName }} • {{ ticket.room }}</p>
+
+        <div class="ticket-footer">
+          <span>{{ ticket.reporterName }}</span>
+          <a [routerLink]="['/admin/tickets', ticket.id]">Review</a>
+          <a [routerLink]="['/admin/assign', ticket.id]">Assign</a>
+        </div>
+      </article>
+    }
+  </div>
+</section>

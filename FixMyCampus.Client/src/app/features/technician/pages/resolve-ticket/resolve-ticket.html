@@ -1,1 +1,28 @@
-<p>resolve-ticket works!</p>
+@if (ticket(); as selectedTicket) {
+  <section class="page-shell narrow-shell">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Resolution</p>
+        <h1>Resolve ticket</h1>
+      </div>
+    </header>
+
+    <div class="detail-card">
+      <h2>{{ selectedTicket.title }}</h2>
+      <p>{{ selectedTicket.description }}</p>
+
+      <form class="ticket-form" [formGroup]="form" (ngSubmit)="resolve()">
+        <div class="field">
+          <label for="resolution">Resolution notes</label>
+          <textarea id="resolution" formControlName="resolution" rows="5"></textarea>
+        </div>
+
+        <button type="submit" class="primary-button" [disabled]="resolving()">
+          {{ resolving() ? 'Resolving...' : 'Mark resolved' }}
+        </button>
+      </form>
+    </div>
+  </section>
+} @else {
+  <p>Loading ticket…</p>
+}

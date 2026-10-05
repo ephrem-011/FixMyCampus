@@ -1,9 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [],
   selector: 'app-navbar',
-  styleUrl: './navbar.scss',
+  imports: [RouterLink],
   templateUrl: './navbar.html',
+  styleUrl: './navbar.scss',
 })
-export class Navbar {}
+export class Navbar {
+  readonly userName = signal('User');
+  readonly userRole = signal('Reporter');
+
+  logout(): void {
+    console.log('Logout');
+  }
+}

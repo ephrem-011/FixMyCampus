@@ -1,1 +1,7 @@
-<p>ticket-filters works!</p>
+<div class="filters">
+  @for (filter of filters; track filter) {
+    <button type="button" class="filter-chip" (click)="statusChange.emit(filter)">
+      {{ filter }}
+    </button>
+  }
+</div>

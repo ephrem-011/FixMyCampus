@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
-  imports: [],
   selector: 'app-empty-state',
-  styleUrl: './empty-state.scss',
+  imports: [],
   templateUrl: './empty-state.html',
+  styleUrl: './empty-state.scss',
 })
-export class EmptyState {}
+export class EmptyState {
+  readonly title = input('No tickets found');
+
+  readonly message = input('There are no tickets to display.');
+}

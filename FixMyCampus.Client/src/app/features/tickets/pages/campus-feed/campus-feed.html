@@ -1,1 +1,16 @@
-<p>campus-feed works!</p>
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Campus</p>
+      <h1>Live maintenance feed</h1>
+    </div>
+
+    <a class="secondary-button" routerLink="/tickets/my">Back to my tickets</a>
+  </header>
+
+  <div class="ticket-list feed-list">
+    @for (ticket of tickets(); track ticket.id) {
+      <app-ticket-card [ticket]="ticket"></app-ticket-card>
+    }
+  </div>
+</section>

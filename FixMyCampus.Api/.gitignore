@@ -481,3 +481,25 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+bin/
+obj/
+
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# Visual Studio
+.vs/
+
+# VS Code
+.vscode/
+
+# Rider
+.idea/
+
+# Vim temporary swap files
+*.swp

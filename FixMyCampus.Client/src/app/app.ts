@@ -6,6 +6,7 @@ import { RouterOutlet } from '@angular/router';
   // imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  imports: [RouterOutlet],
 })
 export class App {
   protected readonly title = signal('FixMyCampus.Client');

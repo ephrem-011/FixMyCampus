@@ -96,7 +96,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/pages/tickets/tickets').then((m) => m.Tickets),
       },
-
+      {
+        path: 'technicians',
+        loadComponent: () =>
+          import('./features/admin/pages/technicians/technicians').then((m) => m.Technicians),
+      },
       {
         path: 'tickets/:id',
         loadComponent: () =>

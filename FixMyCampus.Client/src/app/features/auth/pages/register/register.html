@@ -9,6 +9,9 @@
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      @if (errorMessage()) {
+        <p class="field-error" role="alert">{{ errorMessage() }}</p>
+      }
       <div class="form-group">
         <label for="fullName"> Full name </label>
 
@@ -97,22 +100,6 @@
           registerForm.controls.confirmPassword.hasError('passwordMismatch')
         ) {
           <span class="field-error"> Passwords do not match. </span>
-        }
-      </div>
-
-      <div class="form-group">
-        <label for="role"> Account type </label>
-
-        <select id="role" formControlName="role">
-          <option value="Reporter">Reporter</option>
-
-          <option value="Technician">Technician</option>
-        </select>
-
-        @if (
-          registerForm.controls.role.touched && registerForm.controls.role.hasError('required')
-        ) {
-          <span class="field-error"> Account type is required. </span>
         }
       </div>
 

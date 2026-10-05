@@ -14,6 +14,12 @@ export interface LoginResponse {
   role: string;
 }
 
+export interface RegisterRequest {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthApi {
   private readonly apiUrl = '/api/Auth';
@@ -22,8 +28,19 @@ export class AuthApi {
   constructor(private readonly http: HttpClient) {}
 
   login(request: LoginRequest): Observable<LoginResponse> {
+    return this.authenticate(`${this.apiUrl}/login`, request);
+  }
+
+  register(request: RegisterRequest): Observable<LoginResponse> {
+    return this.authenticate(`${this.apiUrl}/register`, request);
+  }
+
+  private authenticate(
+    url: string,
+    request: LoginRequest | RegisterRequest,
+  ): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${this.apiUrl}/login`, request)
+      .post<LoginResponse>(url, request)
       .pipe(tap((response) => localStorage.setItem(this.storageKey, JSON.stringify(response))));
   }
 

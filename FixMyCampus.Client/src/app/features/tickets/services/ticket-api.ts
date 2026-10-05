@@ -1,20 +1,46 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map, switchMap } from 'rxjs';
 
 import { Ticket, TicketStatus } from '../../../core/models/ticket.model';
 
 export interface TicketCreateRequest {
-  title: string;
   category: string;
   room: string;
   description: string;
   buildingId: number;
-  priority?: Ticket['priority'];
+}
+
+export interface TicketBuilding {
+  id: number;
+  name: string;
+}
+
+export interface TicketTechnician {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
+
+interface TicketDto extends Omit<Ticket, 'title' | 'priority' | 'history' | 'status'> {
+  status: TicketStatus | number;
+  history: Array<{
+    id: number;
+    fromStatus: TicketStatus | number;
+    toStatus: TicketStatus | number;
+    changedById: number;
+    changedByName: string;
+    changedAt: string;
+  }>;
 }
 
 @Injectable({ providedIn: 'root' })
 export class TicketApi {
+  private readonly apiUrl = '/api/Tickets';
+
+  constructor(private readonly http: HttpClient) {}
+
   private readonly tickets: Ticket[] = [
     {
       id: 101,
@@ -122,91 +148,79 @@ export class TicketApi {
   ];
 
   getTickets(): Observable<Ticket[]> {
-    return of(this.tickets.map((ticket) => ({ ...ticket }))).pipe(delay(150));
+    return this.http
+      .get<TicketDto[]>(this.apiUrl)
+      .pipe(map((tickets) => tickets.map((ticket) => this.mapTicket(ticket))));
   }
 
-  getTicketById(id: number): Observable<Ticket | undefined> {
-    return of(this.tickets.find((ticket) => ticket.id === id)).pipe(delay(100));
+  getTicketById(id: number): Observable<Ticket> {
+    return this.http
+      .get<TicketDto>(`${this.apiUrl}/${id}`)
+      .pipe(map((ticket) => this.mapTicket(ticket)));
+  }
+
+  getMyTickets(): Observable<Ticket[]> {
+    return this.http
+      .get<TicketDto[]>(`${this.apiUrl}/my`)
+      .pipe(map((tickets) => tickets.map((ticket) => this.mapTicket(ticket))));
+  }
+
+  getBuildings(): Observable<TicketBuilding[]> {
+    return this.http.get<TicketBuilding[]>(`${this.apiUrl}/buildings`);
+  }
+
+  getTechnicians(): Observable<TicketTechnician[]> {
+    return this.http.get<TicketTechnician[]>(`${this.apiUrl}/technicians`);
   }
 
   createTicket(request: TicketCreateRequest): Observable<Ticket> {
-    const ticket: Ticket = {
-      id: Date.now(),
-      title: request.title,
-      category: request.category,
-      room: request.room,
-      description: request.description,
-      status: 'New',
-      priority: request.priority ?? 'Medium',
-      buildingId: request.buildingId,
-      buildingName: 'Campus Building',
-      reporterId: 99,
-      reporterName: 'Current User',
-      technicianId: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      history: [
-        {
-          id: Date.now(),
-          ticketId: Date.now(),
-          fromStatus: 'New',
-          toStatus: 'New',
-          note: 'Ticket submitted by the reporter.',
-          actor: 'Current User',
-          changedAt: new Date().toISOString(),
-        },
-      ],
-    };
-
-    this.tickets.unshift(ticket);
-
-    return of(ticket).pipe(delay(200));
+    return this.http
+      .post<TicketDto>(this.apiUrl, request)
+      .pipe(map((ticket) => this.mapTicket(ticket)));
   }
 
   assignTicket(ticketId: number, technicianId: number, technicianName: string): Observable<Ticket> {
-    const ticket = this.tickets.find((entry) => entry.id === ticketId);
-
-    if (!ticket) {
-      throw new Error('Ticket not found');
-    }
-
-    ticket.technicianId = technicianId;
-    ticket.technicianName = technicianName;
-    ticket.status = 'Assigned';
-    ticket.updatedAt = new Date().toISOString();
-    ticket.history.unshift({
-      id: Date.now(),
-      ticketId,
-      fromStatus: 'New',
-      toStatus: 'Assigned',
-      note: `Assigned to ${technicianName}.`,
-      actor: 'Admin',
-      changedAt: new Date().toISOString(),
-    });
-
-    return of({ ...ticket }).pipe(delay(150));
+    void technicianName;
+    return this.http
+      .put(`${this.apiUrl}/${ticketId}/assign`, { technicianId })
+      .pipe(switchMap(() => this.getTicketById(ticketId)));
   }
 
   updateTicketStatus(ticketId: number, status: TicketStatus): Observable<Ticket> {
-    const ticket = this.tickets.find((entry) => entry.id === ticketId);
+    const statusValue: Record<TicketStatus, number> = {
+      New: 0,
+      Assigned: 1,
+      InProgress: 2,
+      Resolved: 3,
+    };
+    return this.http
+      .put(`${this.apiUrl}/${ticketId}/status`, { status: statusValue[status] })
+      .pipe(switchMap(() => this.getTicketById(ticketId)));
+  }
 
-    if (!ticket) {
-      throw new Error('Ticket not found');
-    }
+  private mapTicket(dto: TicketDto): Ticket {
+    const statusNames: TicketStatus[] = ['New', 'Assigned', 'InProgress', 'Resolved'];
+    const toStatus = (status: TicketStatus | number): TicketStatus =>
+      typeof status === 'number' ? (statusNames[status] ?? 'New') : status;
 
-    const previousStatus = ticket.status;
-    ticket.status = status;
-    ticket.updatedAt = new Date().toISOString();
-    ticket.history.unshift({
-      id: Date.now(),
-      ticketId,
-      fromStatus: previousStatus,
-      toStatus: status,
-      note: `Status updated to ${status}.`,
-      actor: 'System',
-      changedAt: new Date().toISOString(),
-    });
-
-    return of({ ...ticket }).pipe(delay(150));
+    return {
+      ...dto,
+      title: dto.category,
+      priority: 'Medium',
+      status: toStatus(dto.status),
+      history: dto.history.map((entry) => {
+        const fromStatus = toStatus(entry.fromStatus);
+        const currentStatus = toStatus(entry.toStatus);
+        return {
+          id: entry.id,
+          ticketId: dto.id,
+          fromStatus,
+          toStatus: currentStatus,
+          note: `${fromStatus} to ${currentStatus}`,
+          actor: entry.changedByName,
+          changedAt: entry.changedAt,
+        };
+      }),
+    };
   }
 }

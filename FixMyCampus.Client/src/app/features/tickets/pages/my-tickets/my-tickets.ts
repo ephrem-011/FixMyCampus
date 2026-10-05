@@ -19,6 +19,6 @@ export class MyTickets implements OnInit {
   readonly tickets = signal<Ticket[]>([]);
 
   ngOnInit(): void {
-    this.ticketApi.getTickets().subscribe((tickets) => this.tickets.set(tickets));
+    this.ticketApi.getMyTickets().subscribe((tickets) => this.tickets.set(tickets));
   }
 }

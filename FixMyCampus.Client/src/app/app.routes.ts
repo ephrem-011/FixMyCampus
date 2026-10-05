@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/auth/auth-guard';
+import { RoleGuard } from './core/auth/role-guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'tickets/my',
+    redirectTo: 'auth/login',
     pathMatch: 'full',
   },
 
@@ -12,28 +14,37 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/pages/login/login').then((m) => m.LoginComponent),
   },
 
-  { path: 'auth/register', redirectTo: 'auth/login', pathMatch: 'full' },
+  {
+    path: 'auth/register',
+    loadComponent: () => import('./features/auth/pages/register/register').then((m) => m.Register),
+  },
 
   {
     path: 'tickets',
     children: [
       {
         path: 'my',
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Reporter'] },
         loadComponent: () =>
           import('./features/tickets/pages/my-tickets/my-tickets').then((m) => m.MyTickets),
       },
       {
         path: 'feed',
+        canActivate: [AuthGuard],
         loadComponent: () =>
           import('./features/tickets/pages/campus-feed/campus-feed').then((m) => m.CampusFeed),
       },
       {
         path: 'report',
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Reporter'] },
         loadComponent: () =>
           import('./features/tickets/pages/report-issue/report-issue').then((m) => m.ReportIssue),
       },
       {
         path: ':id',
+        canActivate: [AuthGuard],
         loadComponent: () =>
           import('./features/tickets/pages/ticket-details/ticket-details').then(
             (m) => m.TicketDetails,
@@ -44,6 +55,8 @@ export const routes: Routes = [
 
   {
     path: 'admin',
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['Admin'] },
     children: [
       {
         path: 'tickets',
@@ -69,6 +82,8 @@ export const routes: Routes = [
 
   {
     path: 'technician',
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['Technician'] },
     children: [
       {
         path: 'assigned',
@@ -96,6 +111,6 @@ export const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: 'tickets/my',
+    redirectTo: 'auth/login',
   },
 ];

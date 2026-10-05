@@ -11,14 +11,15 @@
       <h2>{{ selectedTicket.title }}</h2>
       <p>{{ selectedTicket.description }}</p>
 
-      <form class="ticket-form" [formGroup]="form" (ngSubmit)="resolve()">
-        <div class="field">
-          <label for="resolution">Resolution notes</label>
-          <textarea id="resolution" formControlName="resolution" rows="5"></textarea>
-        </div>
-
+      <form class="ticket-form" (ngSubmit)="resolve()">
         <button type="submit" class="primary-button" [disabled]="resolving()">
-          {{ resolving() ? 'Resolving...' : 'Mark resolved' }}
+          {{
+            resolving()
+              ? 'Updating...'
+              : selectedTicket.status === 'Assigned'
+                ? 'Start work'
+                : 'Mark resolved'
+          }}
         </button>
       </form>
     </div>

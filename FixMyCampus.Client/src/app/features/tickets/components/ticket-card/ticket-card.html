@@ -9,7 +9,7 @@
   <p class="ticket-description">{{ ticket.description }}</p>
 
   <div class="ticket-footer">
-    <span>{{ ticket.priority }} priority</span>
+    <span>{{ ticket.createdAt | date: 'mediumDate' }}</span>
     <a [routerLink]="['/tickets', ticket.id]">View details</a>
   </div>
 </article>

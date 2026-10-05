@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 
 import { Ticket } from '../../../../core/models/ticket.model';
 import { TicketApi } from '../../../../features/tickets/services/ticket-api';
+import { AuthApi } from '../../../auth/services/auth-api';
 
 @Component({
   selector: 'app-assigned-tickets',
@@ -14,16 +15,16 @@ import { TicketApi } from '../../../../features/tickets/services/ticket-api';
 })
 export class AssignedTickets implements OnInit {
   private readonly ticketApi = inject(TicketApi);
+  private readonly authApi = inject(AuthApi);
 
   readonly tickets = signal<Ticket[]>([]);
 
   ngOnInit(): void {
-    this.ticketApi.getTickets().subscribe((tickets) => {
-      this.tickets.set(
-        tickets.filter(
-          (ticket) => ticket.technicianId === 12 || ticket.technicianName === 'Marcus Lee',
-        ),
+    const userId = this.authApi.session?.userId;
+    this.ticketApi
+      .getTickets()
+      .subscribe((tickets) =>
+        this.tickets.set(tickets.filter((ticket) => ticket.technicianId === userId)),
       );
-    });
   }
 }

@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Ticket } from '../../../../core/models/ticket.model';
 import { TicketApi } from '../../../../features/tickets/services/ticket-api';
+import { TicketTechnician } from '../../../../features/tickets/services/ticket-api';
 
 @Component({
   selector: 'app-assign-technician',
@@ -21,15 +22,16 @@ export class AssignTechnician implements OnInit {
 
   readonly ticket = signal<Ticket | undefined>(undefined);
   readonly assigning = signal(false);
+  readonly technicians = signal<TicketTechnician[]>([]);
 
   readonly form = this.fb.nonNullable.group({
-    technicianId: [12, [Validators.required, Validators.min(1)]],
-    technicianName: ['Marcus Lee', [Validators.required]],
+    technicianId: [0, [Validators.required, Validators.min(1)]],
   });
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.ticketApi.getTicketById(id).subscribe((ticket) => this.ticket.set(ticket));
+    this.ticketApi.getTechnicians().subscribe((technicians) => this.technicians.set(technicians));
   }
 
   assign(): void {
@@ -40,18 +42,12 @@ export class AssignTechnician implements OnInit {
     }
 
     this.assigning.set(true);
-    this.ticketApi
-      .assignTicket(
-        ticket.id,
-        this.form.value.technicianId ?? 12,
-        this.form.value.technicianName ?? 'Marcus Lee',
-      )
-      .subscribe({
-        next: () => {
-          this.assigning.set(false);
-          this.router.navigateByUrl('/admin/tickets');
-        },
-        error: () => this.assigning.set(false),
-      });
+    this.ticketApi.assignTicket(ticket.id, this.form.getRawValue().technicianId, '').subscribe({
+      next: () => {
+        this.assigning.set(false);
+        this.router.navigateByUrl('/admin/tickets');
+      },
+      error: () => this.assigning.set(false),
+    });
   }
 }

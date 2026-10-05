@@ -9,11 +9,6 @@
   </header>
 
   <form class="ticket-form" [formGroup]="reportForm" (ngSubmit)="submit()">
-    <div class="field">
-      <label for="title">Issue title</label>
-      <input id="title" formControlName="title" placeholder="Broken classroom door handle" />
-    </div>
-
     <div class="field-row">
       <div class="field">
         <label for="category">Category</label>
@@ -36,25 +31,21 @@
       <div class="field">
         <label for="buildingId">Building</label>
         <select id="buildingId" formControlName="buildingId">
-          <option [ngValue]="1">Engineering Hall</option>
-          <option [ngValue]="2">Science Center</option>
-          <option [ngValue]="3">Central Library</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="priority">Priority</label>
-        <select id="priority" formControlName="priority">
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
+          @for (building of buildings(); track building.id) {
+            <option [ngValue]="building.id">{{ building.name }}</option>
+          }
         </select>
       </div>
     </div>
 
     <div class="field">
       <label for="description">Description</label>
-      <textarea id="description" formControlName="description" rows="6" placeholder="Describe what is broken and when it started."></textarea>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="6"
+        placeholder="Describe what is broken and when it started."
+      ></textarea>
     </div>
 
     <button class="primary-button" type="submit" [disabled]="submitting()">

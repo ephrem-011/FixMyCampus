@@ -13,13 +13,13 @@
 
       <form class="ticket-form" [formGroup]="form" (ngSubmit)="assign()">
         <div class="field">
-          <label for="technicianId">Technician ID</label>
-          <input id="technicianId" type="number" formControlName="technicianId" />
-        </div>
-
-        <div class="field">
-          <label for="technicianName">Technician name</label>
-          <input id="technicianName" formControlName="technicianName" />
+          <label for="technicianId">Technician</label>
+          <select id="technicianId" formControlName="technicianId">
+            <option [ngValue]="0" disabled>Select a technician</option>
+            @for (technician of technicians(); track technician.id) {
+              <option [ngValue]="technician.id">{{ technician.name }}</option>
+            }
+          </select>
         </div>
 
         <button type="submit" class="primary-button" [disabled]="assigning()">

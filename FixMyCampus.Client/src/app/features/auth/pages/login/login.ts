@@ -1,16 +1,19 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthApi } from '../../services/auth-api';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly authApi = inject(AuthApi);
+  private readonly router = inject(Router);
 
   readonly loading = signal(false);
   readonly errorMessage = signal('');
@@ -29,12 +32,22 @@ export class LoginComponent {
     this.loading.set(true);
     this.errorMessage.set('');
 
-    const credentials = this.loginForm.getRawValue();
-
-    console.log('Login credentials:', credentials);
-
-    setTimeout(() => {
-      this.loading.set(false);
-    }, 1000);
+    this.authApi.login(this.loginForm.getRawValue()).subscribe({
+      next: (user) => {
+        const destinations: Record<string, string> = {
+          Admin: '/admin/tickets',
+          Technician: '/technician/assigned',
+          Reporter: '/tickets/my',
+        };
+        this.loading.set(false);
+        void this.router.navigateByUrl(destinations[user.role] ?? '/tickets/my');
+      },
+      error: (error: { error?: { message?: string } }) => {
+        this.errorMessage.set(
+          error.error?.message ?? 'Unable to sign in. Check your credentials and try again.',
+        );
+        this.loading.set(false);
+      },
+    });
   }
 }

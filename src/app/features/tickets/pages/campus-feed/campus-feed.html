@@ -1,0 +1,108 @@
+<div class="feed-page">
+
+  <div class="page-header">
+    <div>
+      <h1>Campus Issues</h1>
+      <p>See issues reported across campus.</p>
+    </div>
+
+    <button class="report-btn" (click)="reportIssue()">
+      + Report Issue
+    </button>
+  </div>
+
+  <section class="filters">
+    <div class="filter-group">
+      <label for="building">Building</label>
+
+      <select id="building" [(ngModel)]="selectedBuilding">
+        <option value="">All buildings</option>
+
+        @for (building of buildings; track building) {
+          <option [value]="building">{{ building }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="status">Status</label>
+
+      <select id="status" [(ngModel)]="selectedStatus">
+        <option value="">All statuses</option>
+
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-actions">
+      <button class="filter-btn" (click)="applyFilters()">
+        Apply
+      </button>
+
+      <button class="clear-btn" (click)="clearFilters()">
+        Clear
+      </button>
+    </div>
+  </section>
+
+  @if (loading) {
+    <div class="state">
+      <p>Loading campus issues...</p>
+    </div>
+  }
+
+  @if (errorMessage && !loading) {
+    <div class="error-state">
+      <p>{{ errorMessage }}</p>
+      <button (click)="loadTickets()">Try Again</button>
+    </div>
+  }
+
+  @if (!loading && !errorMessage && tickets.length === 0) {
+    <div class="empty-state">
+      <h3>No issues found</h3>
+      <p>There are no reported issues matching your filters.</p>
+    </div>
+  }
+
+  @if (!loading && tickets.length > 0) {
+    <div class="ticket-grid">
+      @for (ticket of tickets; track ticket.id) {
+        <article class="ticket-card" (click)="openTicket(ticket)">
+
+          <div class="card-top">
+            <span class="category">
+              {{ ticket.category }}
+            </span>
+
+            <span
+              class="status"
+              [class.new]="ticket.status === 'New'"
+              [class.assigned]="ticket.status === 'Assigned'"
+              [class.progress]="ticket.status === 'In Progress'"
+              [class.resolved]="ticket.status === 'Resolved'"
+            >
+              {{ ticket.status }}
+            </span>
+          </div>
+
+          <h3>{{ ticket.description }}</h3>
+
+          <div class="ticket-info">
+            <span>📍 {{ ticket.building }}</span>
+            <span>🚪 Room {{ ticket.room }}</span>
+          </div>
+
+          <div class="card-bottom">
+            <span>{{ ticket.urgency }} urgency</span>
+            <span>{{ ticket.createdAt | date:'mediumDate' }}</span>
+          </div>
+
+        </article>
+      }
+    </div>
+  }
+
+</div>

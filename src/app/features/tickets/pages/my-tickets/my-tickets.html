@@ -1,0 +1,141 @@
+<div class="my-tickets-page">
+
+  <section class="page-header">
+    <div>
+      <span class="eyebrow">MY REPORTS</span>
+      <h1>My Tickets</h1>
+      <p>Track the issues you have reported across campus.</p>
+    </div>
+
+    <button class="report-btn" type="button" (click)="reportIssue()">
+      <span class="plus">+</span>
+      Report an Issue
+    </button>
+  </section>
+
+  <section class="summary-card">
+    <div class="summary-icon">✓</div>
+    <div>
+      <span class="summary-label">TOTAL REPORTS</span>
+      <strong>{{ tickets.length }}</strong>
+    </div>
+    <div class="summary-text">
+      Keep track of every issue you've reported and its current progress.
+    </div>
+  </section>
+
+  @if (loading) {
+    <div class="state-card">
+      <div class="spinner"></div>
+      <h3>Loading your tickets...</h3>
+      <p>Please wait while we retrieve your reports.</p>
+    </div>
+  }
+
+  @if (errorMessage && !loading) {
+    <div class="state-card error-state">
+      <div class="state-icon">!</div>
+      <h3>Unable to load your tickets</h3>
+      <p>{{ errorMessage }}</p>
+
+      <button class="retry-btn" type="button" (click)="loadTickets()">
+        Try Again
+      </button>
+    </div>
+  }
+
+  @if (!loading && !errorMessage && tickets.length === 0) {
+    <div class="state-card empty-state">
+      <div class="empty-icon">+</div>
+      <h3>No tickets yet</h3>
+      <p>You haven't reported any campus issues yet.</p>
+
+      <button class="report-btn" type="button" (click)="reportIssue()">
+        Report Your First Issue
+      </button>
+    </div>
+  }
+
+  @if (!loading && !errorMessage && tickets.length > 0) {
+    <section class="tickets-section">
+
+      <div class="section-heading">
+        <div>
+          <h2>Your Reports</h2>
+          <span>{{ tickets.length }} {{ tickets.length === 1 ? 'ticket' : 'tickets' }}</span>
+        </div>
+      </div>
+
+      <div class="ticket-grid">
+
+        @for (ticket of tickets; track ticket.id) {
+          <article class="ticket-card">
+
+            <div class="ticket-top">
+              <div class="category">
+                <span class="category-dot"></span>
+                {{ ticket.category }}
+              </div>
+
+              <span
+                class="status-badge"
+                [class.status-new]="ticket.status === 'New'"
+                [class.status-assigned]="ticket.status === 'Assigned'"
+                [class.status-progress]="ticket.status === 'In Progress'"
+                [class.status-resolved]="ticket.status === 'Resolved'"
+              >
+                {{ ticket.status }}
+              </span>
+            </div>
+
+            <div class="ticket-content">
+              <h3>{{ ticket.description }}</h3>
+
+              <div class="ticket-meta">
+                <span>
+                  <span class="meta-icon">⌖</span>
+                  {{ ticket.building }}
+                </span>
+
+                <span>
+                  <span class="meta-icon">▣</span>
+                  Room {{ ticket.room }}
+                </span>
+              </div>
+
+              <div class="ticket-bottom">
+                <div class="ticket-info">
+                  <span class="urgency-label">Urgency</span>
+                  <span
+                    class="urgency"
+                    [class.urgency-high]="ticket.urgency === 'High'"
+                    [class.urgency-medium]="ticket.urgency === 'Medium'"
+                    [class.urgency-low]="ticket.urgency === 'Low'"
+                  >
+                    {{ ticket.urgency }}
+                  </span>
+                </div>
+
+                <span class="date">
+                  {{ ticket.createdAt | date:'MMM d, y' }}
+                </span>
+              </div>
+            </div>
+
+            <button
+              class="details-btn"
+              type="button"
+              (click)="openTicket(ticket)"
+            >
+              View Details
+              <span>→</span>
+            </button>
+
+          </article>
+        }
+
+      </div>
+    </section>
+  }
+
+</div>

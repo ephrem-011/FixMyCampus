@@ -1,0 +1,219 @@
+<div class="report-page">
+
+  <div class="page-header">
+    <div class="header-icon">+</div>
+
+    <div>
+      <span class="eyebrow">CAMPUS SUPPORT</span>
+      <h1>Report an Issue</h1>
+      <p>Help us keep the campus safe, functional, and comfortable.</p>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <div class="error-message">
+      <span class="error-icon">!</span>
+      <div>
+        <strong>Something went wrong</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+  }
+
+  <div class="form-layout">
+
+    <section class="form-card">
+
+      <div class="form-card-header">
+        <div>
+          <h2>Issue Details</h2>
+          <p>Tell us what needs attention.</p>
+        </div>
+
+        <span class="required-note">
+          <span>*</span> Required
+        </span>
+      </div>
+
+      <form [formGroup]="issueForm" (ngSubmit)="submitIssue()">
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="category">
+              Issue Category <span>*</span>
+            </label>
+
+            <select id="category" formControlName="category">
+              <option value="" disabled>Select a category</option>
+
+              @for (category of categories; track category) {
+                <option [value]="category">{{ category }}</option>
+              }
+            </select>
+
+            @if (
+              issueForm.controls.category.invalid &&
+              issueForm.controls.category.touched
+            ) {
+              <small>Please select a category.</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="urgency">
+              Urgency <span>*</span>
+            </label>
+
+            <select id="urgency" formControlName="urgency">
+              @for (urgency of urgencies; track urgency) {
+                <option [value]="urgency">{{ urgency }}</option>
+              }
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="building">
+              Building <span>*</span>
+            </label>
+
+            <select id="building" formControlName="building">
+              <option value="" disabled>Select a building</option>
+
+              @for (building of buildings; track building) {
+                <option [value]="building">{{ building }}</option>
+              }
+            </select>
+
+            @if (
+              issueForm.controls.building.invalid &&
+              issueForm.controls.building.touched
+            ) {
+              <small>Please select a building.</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="room">
+              Room / Location <span>*</span>
+            </label>
+
+            <input
+              id="room"
+              type="text"
+              formControlName="room"
+              placeholder="e.g. Room 204"
+            />
+
+            @if (
+              issueForm.controls.room.invalid &&
+              issueForm.controls.room.touched
+            ) {
+              <small>Please enter the room or location.</small>
+            }
+          </div>
+
+        </div>
+
+        <div class="form-group description-group">
+          <label for="description">
+            Describe the Issue <span>*</span>
+          </label>
+
+          <textarea
+            id="description"
+            rows="6"
+            formControlName="description"
+            placeholder="Please describe what happened, where it happened, and any useful details..."
+          ></textarea>
+
+          <div class="field-footer">
+            @if (
+              issueForm.controls.description.invalid &&
+              issueForm.controls.description.touched
+            ) {
+              <small>
+                Please provide at least 10 characters.
+              </small>
+            } @else {
+              <span>Provide enough detail to help our team understand the issue.</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="cancel()"
+            [disabled]="submitting"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="submitting"
+          >
+            @if (submitting) {
+              <span class="button-spinner"></span>
+              Submitting...
+            } @else {
+              Submit Issue
+              <span class="arrow">→</span>
+            }
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+    <aside class="help-card">
+
+      <div class="help-icon">✓</div>
+
+      <h3>Before you submit</h3>
+
+      <p>
+        A few details can help the maintenance team resolve your issue faster.
+      </p>
+
+      <div class="tip">
+        <span>01</span>
+        <div>
+          <strong>Choose the right category</strong>
+          <p>This helps route your report to the right team.</p>
+        </div>
+      </div>
+
+      <div class="tip">
+        <span>02</span>
+        <div>
+          <strong>Give the exact location</strong>
+          <p>Include the building and room number whenever possible.</p>
+        </div>
+      </div>
+
+      <div class="tip">
+        <span>03</span>
+        <div>
+          <strong>Describe the problem clearly</strong>
+          <p>More details help technicians understand what needs fixing.</p>
+        </div>
+      </div>
+
+      <div class="privacy-note">
+        <span>🔒</span>
+        Your report will be shared with the campus support team for follow-up.
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>

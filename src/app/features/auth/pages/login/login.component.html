@@ -1,0 +1,112 @@
+<div class="login-page">
+  <div class="background-overlay"></div>
+
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-icon">✓</div>
+        <div>
+          <h1>FixMyCampus</h1>
+          <p>Campus Issue Reporting</p>
+        </div>
+      </div>
+
+      <div class="welcome">
+        <h2>Welcome Back</h2>
+        <p>Sign in to report and track campus issues.</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submit()">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+
+          <div class="input-wrapper">
+            <span class="input-icon">✉</span>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email"
+              autocomplete="email"
+            />
+          </div>
+
+          <small
+            class="error"
+            *ngIf="
+              loginForm.controls.email.touched &&
+              loginForm.controls.email.invalid
+            "
+          >
+            Please enter a valid email address.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+
+          <div class="input-wrapper">
+            <span class="input-icon">●</span>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <small
+            class="error"
+            *ngIf="
+              loginForm.controls.password.touched &&
+              loginForm.controls.password.invalid
+            "
+          >
+            Password must be at least 6 characters.
+          </small>
+        </div>
+
+        <div class="form-options">
+          <label class="remember">
+            <input type="checkbox" />
+            <span>Remember me</span>
+          </label>
+
+          <button type="button" class="forgot-password">
+            Forgot password?
+          </button>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <button
+          class="login-button"
+          type="submit"
+          [disabled]="submitting"
+        >
+          <span *ngIf="!submitting">Sign In</span>
+          <span *ngIf="submitting">Signing in...</span>
+        </button>
+      </form>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <p class="register-text">
+        Don't have an account?
+        <button type="button" class="register-button" (click)="register()">
+          Create account
+        </button>
+      </p>
+
+      <div class="footer-note">
+        <span>●</span>
+        Secure campus issue management
+      </div>
+    </div>
+  </div>
+</div>

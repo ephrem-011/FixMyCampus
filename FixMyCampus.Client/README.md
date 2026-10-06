@@ -1,59 +1,96 @@
-# FixMyCampusClient
+# FixMyCampus Client
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.8.
+Angular frontend for the FixMyCampus campus facilities and maintenance platform. The app lets users report issues, track work orders, and manage ticket assignments across different roles.
 
-## Development server
+## Overview
 
-To start a local development server, run:
+This frontend is built with Angular 22 and provides a role-based portal for:
 
-```bash
-ng serve
+- Reporter: login/register, submit issues, view their tickets, campus feed
+- Technician: dashboard, assigned work, monitoring status, resolve tickets
+- Admin: dashboard, ticket queue, technician assignment, maintenance management
+
+## Tech stack
+
+- Angular 22
+- TypeScript
+- RxJS
+- Angular Router
+- Angular HttpClient
+- Vitest for unit tests
+
+## Project structure
+
+```text
+FixMyCampus.Client/
+├── src/
+│   ├── app/
+│   │   ├── core/              # auth, guards, models
+│   │   ├── features/          # auth, reporter, technician, admin, tickets
+│   │   └── shared/            # reusable UI components
+│   ├── index.html
+│   └── main.ts
+├── angular.json
+├── package.json
+├── proxy.conf.json
+├── tsconfig.json
+└── README.md
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Features
 
-## Code scaffolding
+- Authentication with login/register flows
+- Role-based route guards
+- Ticket creation and detail views
+- Campus-wide ticket feed
+- Technician assignment workflow
+- Status tracking and updates
+- Building and maintenance-related ticket data
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Getting started
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+1. Install dependencies:
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+2. Start the app in development mode:
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
+The app runs locally at:
 
-For end-to-end (e2e) testing, run:
+```text
+http://localhost:4200/
+```
+
+3. If the backend is running separately, the Angular app proxies `/api` requests to:
+
+```text
+http://localhost:5143
+```
+
+This is configured in `proxy.conf.json`.
+
+## Available scripts
 
 ```bash
-ng e2e
+npm start       # ng serve
+npm run build   # production build
+npm run watch   # watch-mode build
+npm test        # run unit tests
+
+
+## Notes
+
+- The app uses localStorage-based session persistence for auth data.
+- Routes are protected by `AuthGuard` and `RoleGuard` based on user role.
+- This frontend expects the backend API to expose ticket and auth endpoints under `/api`.
+
+## License
+
+This project is intended for internal campus operations use and is not published as a standalone product package.
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

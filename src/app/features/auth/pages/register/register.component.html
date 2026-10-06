@@ -1,0 +1,106 @@
+<div class="register-page">
+  <div class="page-overlay"></div>
+
+  <div class="register-card">
+    <div class="brand">
+      <div class="brand-icon">✓</div>
+      <span>FixMyCampus</span>
+    </div>
+
+    <div class="header">
+      <h1>Create Account</h1>
+      <p>Join your campus community and help make it better.</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="submit()">
+
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input
+          id="fullName"
+          type="text"
+          formControlName="fullName"
+          placeholder="Enter your full name"
+        />
+
+        <small
+          *ngIf="
+            registerForm.controls.fullName.touched &&
+            registerForm.controls.fullName.invalid
+          "
+        >
+          Please enter your full name.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+        />
+
+        <small
+          *ngIf="
+            registerForm.controls.email.touched &&
+            registerForm.controls.email.invalid
+          "
+        >
+          Please enter a valid email address.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Create a password"
+        />
+
+        <small
+          *ngIf="
+            registerForm.controls.password.touched &&
+            registerForm.controls.password.invalid
+          "
+        >
+          Password must be at least 6 characters.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Confirm your password"
+        />
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button
+        type="submit"
+        class="register-button"
+        [disabled]="submitting"
+      >
+        {{ submitting ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <div class="login-link">
+      Already have an account?
+      <button type="button" (click)="login()">Sign in</button>
+    </div>
+
+    <div class="footer">
+      <span>Campus Issue Reporting & Maintenance</span>
+    </div>
+  </div>
+</div>

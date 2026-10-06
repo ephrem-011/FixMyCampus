@@ -8,7 +8,7 @@ import { Ticket } from '../../../Core/models/ticket.model';
 })
 export class TicketApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:5000/api/tickets';
+  private readonly apiUrl = 'http://localhost:5143/api/Tickets';
 
   getTickets(
     building?: string,

@@ -1,1 +1,25 @@
-<p>navbar works!</p>
+<header class="topbar">
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-label="Toggle navigation"
+    (click)="toggleMenu()"
+  >
+    ☰
+  </button>
+
+  <div class="page-heading">
+    <span class="eyebrow">FIXMYCAMPUS WORKSPACE</span>
+    <h1>Campus Maintenance Portal</h1>
+  </div>
+
+  <div class="topbar-right">
+    <div class="welcome">
+      <span>Welcome back,</span>
+      <strong>{{ user?.fullName || 'Campus User' }}</strong>
+    </div>
+    <div class="top-avatar">
+      {{ user?.fullName?.charAt(0) || 'U' }}
+    </div>
+  </div>
+</header>

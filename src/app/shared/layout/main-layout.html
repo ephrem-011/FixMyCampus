@@ -1,0 +1,23 @@
+
+<div class="app-layout">
+  <div
+    class="sidebar-backdrop"
+    [class.visible]="sidebarOpen"
+    (click)="closeSidebar()"
+  ></div>
+
+  <aside
+    class="sidebar-container"
+    [class.open]="sidebarOpen"
+  >
+    <app-sidebar (navigate)="closeSidebar()"></app-sidebar>
+  </aside>
+
+  <div class="main-area">
+   <app-navbar (menuToggle)="toggleSidebar()"></app-navbar>
+
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

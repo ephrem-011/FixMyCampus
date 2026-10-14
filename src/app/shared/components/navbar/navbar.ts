@@ -1,9 +1,24 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { AuthApiService } from '../../../features/auth/services/auth-api.service';
 
 @Component({
-  imports: [],
   selector: 'app-navbar',
-  styleUrl: './navbar.scss',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './navbar.html',
+  styleUrl: './navbar.scss',
 })
-export class Navbar {}
+export class Navbar {
+  private readonly authApi = inject(AuthApiService);
+
+  @Output() readonly menuToggle = new EventEmitter<void>();
+
+  get user() {
+    return this.authApi.getUser();
+  }
+
+  toggleMenu(): void {
+    this.menuToggle.emit();
+  }
+}
